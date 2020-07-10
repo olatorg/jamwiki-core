@@ -18,6 +18,7 @@ package org.jamwiki.utils;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.InputStream;
 import java.net.URL;
 import java.net.URLDecoder;
 import java.util.Properties;
@@ -74,12 +75,9 @@ public class WikiLogger {
 	 *
 	 */
 	private static void initializeLogParams() {
-		FileInputStream stream = null;
-		try {
-			File propertyFile = WikiLogger.loadProperties();
-			stream = new FileInputStream(propertyFile);
+		try (InputStream is = Thread.currentThread().getContextClassLoader().getResourceAsStream(WikiLogger.LOG_PROPERTIES_FILENAME)) {
 			Properties properties = new Properties();
-			properties.load(stream);
+			properties.load(is);
 			String pattern = properties.getProperty("org.jamwiki.pattern");
 			int limit = new Integer(properties.getProperty("org.jamwiki.limit")).intValue();
 			int count = new Integer(properties.getProperty("org.jamwiki.count")).intValue();
@@ -93,16 +91,10 @@ public class WikiLogger {
 			Logger logger = Logger.getLogger(WikiLogger.class.getName());
 			logger.addHandler(WikiLogger.DEFAULT_LOG_HANDLER);
 			logger.setLevel(DEFAULT_LOG_LEVEL);
-			logger.config("JAMWiki log initialized from " + propertyFile.getPath() + " with pattern " + pattern);
+			logger.config("JAMWiki log initialized from " + WikiLogger.LOG_PROPERTIES_FILENAME + " with pattern " + pattern);
 		} catch (Exception e) {
 			System.out.println("WARNING: Unable to load custom JAMWiki logging configuration, using system default " + e.getMessage());
 			WikiLogger.DEFAULT_LOG_HANDLER = null;
-		} finally {
-			if (stream != null) {
-				try {
-					stream.close();
-				} catch (Exception ex) {}
-			}
 		}
 	}
 

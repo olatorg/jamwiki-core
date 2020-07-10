@@ -21,6 +21,7 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.Properties;
 // FIXME - remove this import
 //import org.apache.commons.pool.impl.GenericObjectPool;
@@ -326,20 +327,15 @@ public class Environment {
 		if (def != null) {
 			properties = new SortedProperties(def);
 		}
-		File file = null;
-		try {
-			file = findProperties(propertyFile);
-			if (file == null) {
-				logger.warning("Property file " + propertyFile + " does not exist");
-			} else if (!file.exists()) {
-				logger.warning("Property file " + file.getPath() + " does not exist");
+
+		try (InputStream is = Thread.currentThread().getContextClassLoader().getResourceAsStream(propertyFile)) {
+			if (is != null) {
+				properties.load(is);
 			} else {
-				logger.config("Loading properties from " + file.getPath());
-				properties.load(new FileInputStream(file));
+				logger.warning("Property file " + propertyFile + " does not exist");
 			}
-		} catch (Exception | Error e) {
-			String path = file == null ? "<null>" : file.getPath();
-			logger.severe("Failure while trying to load properties file " + path, e);
+		} catch (IOException e) {
+			logger.severe("Failure while trying to load properties file " + propertyFile, e);
 		}
 		return properties;
 	}

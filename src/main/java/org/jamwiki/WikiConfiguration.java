@@ -17,6 +17,7 @@
 package org.jamwiki;
 
 import java.io.File;
+import java.io.InputStream;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Vector;
@@ -27,6 +28,7 @@ import org.jamwiki.utils.XMLUtil;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
+import org.xml.sax.InputSource;
 
 /**
  * The <code>WikiConfiguration</code> class provides the infrastructure for
@@ -127,14 +129,18 @@ public class WikiConfiguration {
 	 *
 	 */
 	private void initialize() {
-		try {
+		try (InputStream is = Thread.currentThread().getContextClassLoader().getResourceAsStream(JAMWIKI_CONFIGURATION_FILE)) {
 			this.dataHandlers = new Vector();
 			this.namespaces = new HashMap();
 			this.parsers = new Vector();
 			this.pseudotopics = new Vector();
 			this.userHandlers = new Vector();
-			File file = Utilities.getClassLoaderFile(JAMWIKI_CONFIGURATION_FILE);
-			Document document = XMLUtil.parseXML(file, false);
+			Document document = null;
+			if (is != null) {
+				document = XMLUtil.parseXML(new InputSource(is), false);
+			} else {
+				logger.warning("Configuration file " + JAMWIKI_CONFIGURATION_FILE + " does not exist");
+			}
 			Node node = document.getElementsByTagName(XML_CONFIGURATION_ROOT).item(0);
 			NodeList children = node.getChildNodes();
 			Node child = null;
@@ -154,7 +160,7 @@ public class WikiConfiguration {
 					logger.finest("Unknown child of " + node.getNodeName() + " tag: " + child.getNodeName() + " / " + child.getNodeValue());
 				}
 			}
-			logger.config("Configuration values loaded from " + file.getPath());
+			logger.config("Configuration values loaded from " + JAMWIKI_CONFIGURATION_FILE);
 		} catch (Exception e) {
 			logger.severe("Failure while parsing configuration file " + JAMWIKI_CONFIGURATION_FILE, e);
 		}
