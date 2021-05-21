@@ -9,7 +9,7 @@
 
     <name>JAMWiki Core</name>
     <description>This is a customized project of an unknown version of JAMWiki customized by OpenOlat.</description>
-    <url>https://olat-org.github.io/jamwiki-core</url>
+    <url>https://olatorg.github.io/jamwiki-core</url>
 
     <licenses>
         <license>
@@ -155,9 +155,9 @@
     </distributionManagement>
 
     <scm>
-        <connection>scm:git:git://github.com/olat-org/jamwiki-core.git</connection>
-        <developerConnection>scm:git:ssh://github.com:olat-org/jamwiki-core.git</developerConnection>
-        <url>https://github.com/olat-org/jamwiki-core/tree/master</url>
+        <connection>scm:git:git://github.com/olatorg/jamwiki-core.git</connection>
+        <developerConnection>scm:git:ssh://github.com:olatorg/jamwiki-core.git</developerConnection>
+        <url>https://github.com/olatorg/jamwiki-core/tree/master</url>
     </scm>
 
     <profiles>
