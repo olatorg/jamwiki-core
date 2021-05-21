@@ -8,7 +8,7 @@
     <version>${revision}</version>
 
     <name>JAMWiki Core</name>
-    <description>This is a customized project of an unknown version of JAMWiki customized by OpenOlat.</description>
+    <description>This is a customized project of an unknown version of JAMWiki used by OpenOlat.</description>
     <url>https://olatorg.github.io/jamwiki-core</url>
 
     <licenses>

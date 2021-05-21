@@ -1,6 +1,6 @@
 # JAMWiki Core
 
-This is a customized project of an unknown version of JAMWiki customized by OpenOlat.
+This is a customized project of an unknown version of JAMWiki used by OpenOlat.
 
 ## License
 
